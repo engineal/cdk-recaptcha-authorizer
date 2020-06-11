@@ -2,8 +2,8 @@ import mockedEnv, {RestoreFn} from 'mocked-env';
 import {mocked} from 'ts-jest/utils';
 
 import axios from 'axios';
-
 jest.mock('axios');
+const mockedAxios = mocked(axios, true);
 
 const mockedGetSecretValue = jest.fn();
 const mockedGetParameter = jest.fn();
@@ -20,12 +20,23 @@ jest.mock('aws-sdk', () => ({
     captureAWSClient: (client: any) => client
 }));*/
 
-const mockedAxios = mocked(axios, true);
-
 let restore: RestoreFn | undefined = undefined;
 afterEach(() => {
     if (restore) restore();
 });
+
+const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
+const event = {
+    headers: {
+        'x-recaptcha-token': 'test-token'
+    },
+    methodArn,
+    requestContext: {
+        identity: {
+            sourceIp: '1.2.3.4'
+        }
+    }
+};
 
 test('handler allows valid request', async () => {
     restore = mockedEnv({
@@ -45,19 +56,6 @@ test('handler allows valid request', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     const response = await lambda.handler(event);
     // THEN
@@ -100,19 +98,6 @@ test('handler blocks invalid action', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     const response = await lambda.handler(event);
     // THEN
@@ -155,19 +140,6 @@ test('handler blocks rejected request', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     const response = await lambda.handler(event);
     // THEN
@@ -219,19 +191,6 @@ test('handler caches ssm secret', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     await lambda.handler(event);
     await lambda.handler(event);
@@ -271,19 +230,6 @@ test('handler caches secrets manager secret', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     await lambda.handler(event);
     await lambda.handler(event);
@@ -327,19 +273,6 @@ test('handler parses secrets manager secret', async () => {
             hostname: 'example.com'
         }
     }));
-
-    const methodArn = 'arn:aws:execute-api:us-east-1:1234567890:abcdefghij/prod/GET/test';
-    const event = {
-        headers: {
-            'x-recaptcha-token': 'test-token'
-        },
-        methodArn,
-        requestContext: {
-            identity: {
-                sourceIp: '1.2.3.4'
-            }
-        }
-    };
     // WHEN
     await lambda.handler(event);
     await lambda.handler(event);
