@@ -60,26 +60,7 @@ test('Lambda Function Created with ssm variables', () => {
             "Variables": {
                 "ALLOWED_ACTIONS": "[\"test-action\"]",
                 "SECRET_KEY_TYPE": "SSM_PARAMETER",
-                "SECRET_KEY_PARAMETER_ARN": {
-                    "Fn::Join": [
-                        "",
-                        [
-                            "arn:",
-                            {
-                                "Ref": "AWS::Partition"
-                            },
-                            ":ssm:",
-                            {
-                                "Ref": "AWS::Region"
-                            },
-                            ":",
-                            {
-                                "Ref": "AWS::AccountId"
-                            },
-                            ":parameter/test-secret-key"
-                        ]
-                    ]
-                }
+                "SECRET_KEY_PARAMETER": "test-secret-key"
             }
         }
     }));

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import * as SecretsManager from 'aws-sdk/clients/secretsmanager';
-import * as SSM from 'aws-sdk/clients/ssm';
+import * as AWS from 'aws-sdk';
 
 /*
  * TODO: capture AWS clients with xray
@@ -8,10 +7,10 @@ import * as SSM from 'aws-sdk/clients/ssm';
  * the parcel build breaks with aws-xray-sdk
  */
 //import * as xray from 'aws-xray-sdk';
-//const secretsManagerClient = xray.captureAWSClient(new SecretsManager());
-//const ssmClient = xray.captureAWSClient(new SSM());
-const secretsManagerClient = new SecretsManager();
-const ssmClient = new SSM();
+//const secretsManagerClient = xray.captureAWSClient(new AWS.SecretsManager());
+//const ssmClient = xray.captureAWSClient(new AWS.SSM());
+const secretsManagerClient = new AWS.SecretsManager();
+const ssmClient = new AWS.SSM();
 
 const allowedActions = JSON.parse(process.env.ALLOWED_ACTIONS!);
 
@@ -56,7 +55,7 @@ async function getSecret(): Promise<string> {
         case 'PLAIN_TEXT':
             return process.env.SECRET_KEY!;
         case 'SSM_PARAMETER':
-            if (!cachedSecret) cachedSecret = await getSsmParameterSecret(process.env.SECRET_KEY_PARAMETER_ARN!);
+            if (!cachedSecret) cachedSecret = await getSsmParameterSecret(process.env.SECRET_KEY_PARAMETER!);
             return cachedSecret;
         case 'SECRETS_MANAGER':
             if (!cachedSecret) cachedSecret = await getSecretsManagerSecret(process.env.SECRET_KEY_SECRET_ARN!, process.env.SECRET_KEY_FIELD);
@@ -70,9 +69,9 @@ export const resetSecret = () => {
     cachedSecret = undefined;
 };
 
-async function getSsmParameterSecret(secretKeyParameterArn: string): Promise<string> {
+async function getSsmParameterSecret(secretKeyParameter: string): Promise<string> {
     const parameterResponse = await ssmClient.getParameter({
-        Name: secretKeyParameterArn,
+        Name: secretKeyParameter,
         WithDecryption: true
     }).promise();
     if (parameterResponse.Parameter?.Value) {
