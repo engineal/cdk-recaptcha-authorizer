@@ -36,10 +36,7 @@ test('Lambda Function Created with ssm secret key', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
-    const secretKeyParameter = ssm.StringParameter.fromSecureStringParameterAttributes(stack, 'TestParameter', {
-        parameterName: 'test-secret-key',
-        version: 1
-    });
+    const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
     const authorizer = new RecaptchaAuthorizer.RecaptchaAuthorizer(stack, 'TestAuthorizer', {
         allowedActions: ['test-action'],
@@ -210,10 +207,7 @@ test('SSM parameter read granted', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
-    const secretKeyParameter = ssm.StringParameter.fromSecureStringParameterAttributes(stack, 'TestParameter', {
-        parameterName: 'test-secret-key',
-        version: 1
-    });
+    const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
     const authorizer = new RecaptchaAuthorizer.RecaptchaAuthorizer(stack, 'TestAuthorizer', {
         allowedActions: ['test-action'],

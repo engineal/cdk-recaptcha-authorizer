@@ -47,10 +47,7 @@ SecretKey.fromPlainText('my-secret-key')
 
 #### SSM Parameter Store
 ```typescript
-const parameter = ssm.StringParameter.fromSecureStringParameterAttributes(this, 'TestParameter', {
-    parameterName: 'test-secret-key',
-    version: 1
-});
+const parameter = ssm.StringParameter.fromStringParameterName(this, 'TestParameter', 'test-secret-key');
 SecretKey.fromSsmParameter(parameter)
 ```
 
