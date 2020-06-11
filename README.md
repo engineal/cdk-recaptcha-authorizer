@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/engineal/aws-cdk-recaptcha-authorizer/workflows/Node.js%20CI/badge.svg)
+
 # aws-cdk-recaptcha-authorizer
 ## Welcome to your CDK TypeScript Construct Library project!
 
