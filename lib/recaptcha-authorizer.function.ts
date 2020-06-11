@@ -2,6 +2,17 @@ import axios from 'axios';
 import * as SecretsManager from 'aws-sdk/clients/secretsmanager';
 import * as SSM from 'aws-sdk/clients/ssm';
 
+/*
+ * TODO: capture AWS clients with xray
+ * Due to https://github.com/parcel-bundler/parcel/issues/3151 and https://github.com/aws/aws-cdk/issues/7779,
+ * the parcel build breaks with aws-xray-sdk
+ */
+//import * as xray from 'aws-xray-sdk';
+//const secretsManagerClient = xray.captureAWSClient(new SecretsManager());
+//const ssmClient = xray.captureAWSClient(new SSM());
+const secretsManagerClient = new SecretsManager();
+const ssmClient = new SSM();
+
 const allowedActions = JSON.parse(process.env.ALLOWED_ACTIONS!);
 
 /**
@@ -39,6 +50,7 @@ export const handler = async (event: any) => {
 };
 
 let cachedSecret: string | undefined = undefined;
+
 async function getSecret(): Promise<string> {
     switch (process.env.SECRET_KEY_TYPE) {
         case 'PLAIN_TEXT':
@@ -59,7 +71,6 @@ export const resetSecret = () => {
 };
 
 async function getSsmParameterSecret(secretKeyParameterArn: string): Promise<string> {
-    const ssmClient = new SSM();
     const parameterResponse = await ssmClient.getParameter({
         Name: secretKeyParameterArn,
         WithDecryption: true
@@ -72,7 +83,6 @@ async function getSsmParameterSecret(secretKeyParameterArn: string): Promise<str
 }
 
 async function getSecretsManagerSecret(secretKeySecretArn: string, field?: string): Promise<string> {
-    const secretsManagerClient = new SecretsManager();
     const secretResponse = await secretsManagerClient.getSecretValue({
         SecretId: secretKeySecretArn
     }).promise();
