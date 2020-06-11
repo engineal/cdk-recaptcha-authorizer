@@ -6,7 +6,7 @@ import * as ssm from "@aws-cdk/aws-ssm";
 import * as RecaptchaAuthorizer from '../lib/recaptcha-authorizer';
 import {SecretKey} from "../lib";
 
-test('Lambda Function Created with plain text variables', () => {
+test('Lambda Function Created with plain text secret key', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
@@ -15,11 +15,9 @@ test('Lambda Function Created with plain text variables', () => {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromPlainText('secret')
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     expectCDK(stack).to(haveResource("AWS::Lambda::Function", {
         "Handler": "index.handler",
@@ -34,24 +32,19 @@ test('Lambda Function Created with plain text variables', () => {
     }));
 });
 
-test('Lambda Function Created with ssm variables', () => {
+test('Lambda Function Created with ssm secret key', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
-    const secretKeyParameter = ssm.StringParameter.fromSecureStringParameterAttributes(stack, 'TestParameter', {
-        parameterName: 'test-secret-key',
-        version: 1
-    });
+    const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
     const authorizer = new RecaptchaAuthorizer.RecaptchaAuthorizer(stack, 'TestAuthorizer', {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromSsmParameter(secretKeyParameter)
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     expectCDK(stack).to(haveResource("AWS::Lambda::Function", {
         "Handler": "index.handler",
@@ -66,7 +59,7 @@ test('Lambda Function Created with ssm variables', () => {
     }));
 });
 
-test('Lambda Function Created with secrets manager variables', () => {
+test('Lambda Function Created with secrets manager secret key', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
@@ -78,11 +71,9 @@ test('Lambda Function Created with secrets manager variables', () => {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromSecretsManager(secretKeySecret)
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     expectCDK(stack).to(haveResource("AWS::Lambda::Function", {
         "Handler": "index.handler",
@@ -116,7 +107,7 @@ test('Lambda Function Created with secrets manager variables', () => {
     }));
 });
 
-test('Lambda Function Created with secrets manager and field variables', () => {
+test('Lambda Function Created with secrets manager and json field', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
@@ -128,11 +119,9 @@ test('Lambda Function Created with secrets manager and field variables', () => {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromSecretsManager(secretKeySecret, 'test-field')
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     expectCDK(stack).to(haveResource("AWS::Lambda::Function", {
         "Handler": "index.handler",
@@ -176,11 +165,9 @@ test('Request Authorizer Created', () => {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromPlainText('secret')
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     expectCDK(stack).to(haveResource("AWS::ApiGateway::Authorizer", {
         "Type": "REQUEST",
@@ -220,20 +207,15 @@ test('SSM parameter read granted', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, "TestStack");
     const api = new apigateway.RestApi(stack, "TestAPI");
-    const secretKeyParameter = ssm.StringParameter.fromSecureStringParameterAttributes(stack, 'TestParameter', {
-        parameterName: 'test-secret-key',
-        version: 1
-    });
+    const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
     const authorizer = new RecaptchaAuthorizer.RecaptchaAuthorizer(stack, 'TestAuthorizer', {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromSsmParameter(secretKeyParameter)
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     // TODO: check for allow to secret
     expectCDK(stack).to(haveResource("AWS::IAM::Policy", {
@@ -286,11 +268,9 @@ test('Secrets Manager read granted', () => {
         allowedActions: ['test-action'],
         reCaptchaSecretKey: SecretKey.fromSecretsManager(secretKeySecret)
     });
-    api.root.addResource('test', {
-        defaultMethodOptions: {
-            authorizer
-        }
-    }).addMethod('GET');
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
     // THEN
     // TODO: check for allow to secret
     expectCDK(stack).to(haveResource("AWS::IAM::Policy", {

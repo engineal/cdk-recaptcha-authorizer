@@ -75,7 +75,8 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
     /**
      * The authorization type of this authorizer.
      */
-    set authorizationType(authorizationType: AuthorizationType | undefined) {}
+    set authorizationType(authorizationType: AuthorizationType | undefined) {
+    }
 
     /**
      * Attaches this authorizer to a specific REST API.
