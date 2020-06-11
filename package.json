@@ -27,6 +27,7 @@
   },
   "peerDependencies": {
     "@aws-cdk/aws-apigateway": "^1.45.0",
+    "@aws-cdk/aws-lambda": "^1.45.0",
     "@aws-cdk/aws-secretsmanager": "^1.45.0",
     "@aws-cdk/aws-ssm": "^1.45.0",
     "@aws-cdk/core": "1.45.0"
@@ -34,6 +35,7 @@
   "dependencies": {
     "@aws-cdk/aws-apigateway": "^1.45.0",
     "@aws-cdk/aws-iam": "^1.45.0",
+    "@aws-cdk/aws-lambda": "^1.45.0",
     "@aws-cdk/aws-lambda-nodejs": "^1.45.0",
     "@aws-cdk/aws-secretsmanager": "^1.45.0",
     "@aws-cdk/aws-ssm": "^1.45.0",

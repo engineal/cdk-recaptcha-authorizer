@@ -1,5 +1,13 @@
 import {Construct} from '@aws-cdk/core';
-import {IdentitySource, RequestAuthorizer} from "@aws-cdk/aws-apigateway";
+import {
+    AuthorizationType,
+    Authorizer,
+    IAuthorizer,
+    IdentitySource,
+    RequestAuthorizer,
+    RestApi
+} from "@aws-cdk/aws-apigateway";
+import {Tracing} from "@aws-cdk/aws-lambda";
 import {NodejsFunction} from "@aws-cdk/aws-lambda-nodejs";
 import {SecretKey} from "./secret-key";
 
@@ -12,6 +20,12 @@ export interface RecaptchaAuthorizerProps {
      * The secret key
      */
     readonly reCaptchaSecretKey: SecretKey
+    /**
+     * Enable AWS X-Ray Tracing for Lambda Function.
+     *
+     * @default Tracing.Disabled
+     */
+    readonly tracing?: Tracing;
 }
 
 /**
@@ -19,21 +33,55 @@ export interface RecaptchaAuthorizerProps {
  *
  * @resource AWS::ApiGateway::Authorizer
  */
-export class RecaptchaAuthorizer extends RequestAuthorizer {
+export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
+
+    private authorizer: RequestAuthorizer;
+
     constructor(scope: Construct, id: string, props: RecaptchaAuthorizerProps) {
-        const handler = new NodejsFunction(scope, 'function', {
+        super(scope, id);
+
+        const handler = new NodejsFunction(this, 'function', {
             environment: {
                 ALLOWED_ACTIONS: JSON.stringify(props.allowedActions),
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
-            }
+            },
+            tracing: props.tracing
         });
-
         if (props.reCaptchaSecretKey.grantRead) props.reCaptchaSecretKey.grantRead(handler);
 
-        super(scope, id, {
+        this.authorizer = new RequestAuthorizer(this, 'Authorizer', {
             handler,
             identitySources: [IdentitySource.header('X-reCAPTCHA-Token')]
         });
+    }
+
+    /**
+     * The authorizer ID.
+     * @attribute
+     */
+    get authorizerId() {
+        return this.authorizer.authorizerId;
+    }
+
+    /**
+     * The authorization type of this authorizer.
+     */
+    get authorizationType(): AuthorizationType | undefined {
+        return this.authorizer.authorizationType;
+    }
+
+    /**
+     * The authorization type of this authorizer.
+     */
+    set authorizationType(authorizationType: AuthorizationType | undefined) {}
+
+    /**
+     * Attaches this authorizer to a specific REST API.
+     * @internal
+     */
+    public _attachToApi(restApi: RestApi) {
+        // @ts-ignore
+        this.authorizer._attachToApi(restApi);
     }
 }

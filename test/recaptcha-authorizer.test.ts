@@ -218,7 +218,7 @@ test('Request Authorizer Created', () => {
                     ":lambda:path/2015-03-31/functions/",
                     {
                         "Fn::GetAtt": [
-                            "functionF19B1A04",
+                            "TestAuthorizerfunction3F10EDDB",
                             "Arn"
                         ]
                     },
@@ -227,7 +227,12 @@ test('Request Authorizer Created', () => {
             ]
         },
         "IdentitySource": "method.request.header.X-reCAPTCHA-Token"
-    }));
+    }).and(haveResource("AWS::ApiGateway::Method", {
+        "AuthorizationType": "CUSTOM",
+        "AuthorizerId": {
+            "Ref": "TestAuthorizer64D89012"
+        }
+    })));
 });
 
 test('SSM parameter read granted', () => {

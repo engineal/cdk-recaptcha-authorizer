@@ -14,6 +14,10 @@ jest.mock('aws-sdk/clients/ssm', () => jest.fn(() => ({
     getParameter: mockedGetParameter
 })));
 
+/*jest.mock('aws-xray-sdk', () => ({
+    captureAWSClient: (client: any) => client
+}));*/
+
 const mockedAxios = mocked(axios, true);
 
 let restore: RestoreFn | undefined = undefined;
