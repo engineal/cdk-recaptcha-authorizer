@@ -71,7 +71,7 @@ SecretKey.fromSecretsManager(secret, 'my-secret-field')
  * `npm run watch`   watch for changes and compile
  * `npm run test`    perform the jest unit tests
 
-##License
+## License
 
    Copyright 2020 Aaron Lucia
 
