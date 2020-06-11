@@ -46,6 +46,7 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
             },
+            minify: true,
             tracing: props.tracing
         });
         if (props.reCaptchaSecretKey.grantRead) props.reCaptchaSecretKey.grantRead(handler);

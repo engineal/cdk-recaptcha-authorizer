@@ -7,12 +7,14 @@ jest.mock('axios');
 
 const mockedGetSecretValue = jest.fn();
 const mockedGetParameter = jest.fn();
-jest.mock('aws-sdk/clients/secretsmanager', () => jest.fn(() => ({
-    getSecretValue: mockedGetSecretValue
-})));
-jest.mock('aws-sdk/clients/ssm', () => jest.fn(() => ({
-    getParameter: mockedGetParameter
-})));
+jest.mock('aws-sdk', () => ({
+    SecretsManager: jest.fn(() => ({
+        getSecretValue: mockedGetSecretValue
+    })),
+    SSM: jest.fn(() => ({
+        getParameter: mockedGetParameter
+    }))
+}));
 
 /*jest.mock('aws-xray-sdk', () => ({
     captureAWSClient: (client: any) => client
@@ -194,7 +196,7 @@ test('handler caches ssm secret', async () => {
     restore = mockedEnv({
         ALLOWED_ACTIONS: '["test-action"]',
         SECRET_KEY_TYPE: 'SSM_PARAMETER',
-        SECRET_KEY_PARAMETER_ARN: 'arn:aws:ssm:us-east-1:1234567890:parameter/test-secret-key'
+        SECRET_KEY_PARAMETER: 'test-secret-key'
     });
 
     const lambda = require('../lib/recaptcha-authorizer.function');

@@ -27,7 +27,7 @@ export abstract class SecretKey {
         return {
             secretKeyType: 'SSM_PARAMETER',
             environment: {
-                SECRET_KEY_PARAMETER_ARN: secretKeyParameter.parameterArn
+                SECRET_KEY_PARAMETER: secretKeyParameter.parameterName
             },
             grantRead: grantee => secretKeyParameter.grantRead(grantee)
         };
