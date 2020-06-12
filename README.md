@@ -1,4 +1,9 @@
 ![Node.js CI](https://github.com/engineal/aws-cdk-recaptcha-authorizer/workflows/Node.js%20CI/badge.svg)
+![npm (scoped)](https://img.shields.io/npm/v/@engineal/aws-cdk-recaptcha-authorizer)
+![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@engineal/aws-cdk-recaptcha-authorizer)
+![Snyk Vulnerabilities for npm scoped package](https://img.shields.io/snyk/vulnerabilities/npm/@engineal/aws-cdk-recaptcha-authorizer)
+![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@engineal/aws-cdk-recaptcha-authorizer)
+![NPM](https://img.shields.io/npm/l/@engineal/aws-cdk-recaptcha-authorizer)
 
 ## Google reCAPTCHA API Gateway REST API authorizer
 
