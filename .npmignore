@@ -13,5 +13,6 @@ cdk.out
 .github
 test
 
+.eslintrc.json
 jest.config.js
 tsconfig.json
