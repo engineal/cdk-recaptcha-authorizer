@@ -14,5 +14,6 @@ cdk.out
 test
 
 .eslintrc.json
+.releaserc
 jest.config.js
 tsconfig.json
