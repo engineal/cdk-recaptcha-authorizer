@@ -14,12 +14,19 @@ import {Tracing} from '@aws-cdk/aws-lambda';
 export interface RecaptchaAuthorizerProps {
 
     /**
+     * The minimum score threshold to allow by this authorizer
+     *
+     * @default 0.5
+     */
+    readonly scoreThreshold?: number
+
+    /**
      * The actions to be allowed by this authorizer
      */
     readonly allowedActions: string[]
 
     /**
-     * The secret key
+     * The reCaptcha API secret key
      */
     readonly reCaptchaSecretKey: SecretKey
 
@@ -31,6 +38,10 @@ export interface RecaptchaAuthorizerProps {
     readonly tracing?: Tracing;
 
 }
+
+const MIN_SCORE_THRESHOLD = 0.0;
+const MAX_SCORE_THRESHOLD = 1.0;
+const DEFAULT_SCORE_THRESHOLD = 0.5;
 
 /**
  * Request-based lambda authorizer that authorizes requests using Google's reCaptcha API
@@ -44,9 +55,16 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
     constructor(scope: Construct, id: string, props: RecaptchaAuthorizerProps) {
         super(scope, id);
 
+        const scoreThreshold = props.scoreThreshold ?? DEFAULT_SCORE_THRESHOLD;
+
+        if (scoreThreshold < MIN_SCORE_THRESHOLD || scoreThreshold > MAX_SCORE_THRESHOLD) {
+            throw new Error('scoreThreshold must be between 0.0 and 1.0');
+        }
+
         const handler = new NodejsFunction(this, 'function', {
             environment: {
                 ALLOWED_ACTIONS: JSON.stringify(props.allowedActions),
+                SCORE_THRESHOLD: scoreThreshold.toString(),
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
             },
