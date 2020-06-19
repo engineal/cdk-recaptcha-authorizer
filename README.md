@@ -17,8 +17,9 @@ your client code executes the reCAPTCHA client, the returned token from the Goog
 should be included in the API Gateway request in the `X-reCAPTCHA-Token` header.
 
 The `RecaptchaAuthorizer` can be used similarly to the `TokenAuthorizer` and `RequestAuthorizer` that are
-provided by the `@aws-cdk/aws-apigateway` package. It expects 2 properties:
+provided by the `@aws-cdk/aws-apigateway` package. It accepts 3 properties:
 
+* `scoreThreshold` (default: 0.5) is the threshold below which requests will be denied.
 * `allowedActions` is a list of allowed actions. When your frontend executes the reCAPTCHA client, it provides
 an action name. The reCAPTCHA authorizer will verify this action is allowed and deny a request if the action
 is not in this list.
