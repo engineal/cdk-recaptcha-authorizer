@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.0.3...v1.1.0) (2020-06-19)
+
+
+### Features
+
+* Configure score threshold ([#16](https://github.com/engineal/aws-cdk-recaptcha-authorizer/issues/16)) ([94bf122](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/94bf122310516b6017a2ec55f0de84de780a9afd))
+
 ## [1.0.3](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.0.2...v1.0.3) (2020-06-13)
 
 
