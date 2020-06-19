@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as cdk from '@aws-cdk/core';
 import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
@@ -23,6 +24,7 @@ test('Lambda Function Created with plain text secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0.5',
                 SECRET_KEY: 'secret',
                 SECRET_KEY_TYPE: 'PLAIN_TEXT'
             }
@@ -51,6 +53,7 @@ test('Lambda Function Created with ssm secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_PARAMETER: 'test-secret-key',
                 SECRET_KEY_TYPE: 'SSM_PARAMETER'
             }
@@ -81,6 +84,7 @@ test('Lambda Function Created with secrets manager secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_SECRET_ARN: {
                     'Fn::Join': [
                         '',
@@ -130,6 +134,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_FIELD: 'test-field',
                 SECRET_KEY_SECRET_ARN: {
                     'Fn::Join': [
@@ -312,5 +317,122 @@ test('Secrets Manager read granted', () => {
             ],
             Version: '2012-10-17'
         }
+    }));
+});
+
+test('Score threshold -3 out of bounds', () => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'TestStack');
+
+    // THEN
+    expect(() => new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
+        allowedActions: ['test-action'],
+        reCaptchaSecretKey: SecretKey.fromPlainText('secret'),
+        scoreThreshold: -3
+    })).toThrowError('scoreThreshold must be between 0.0 and 1.0');
+});
+
+test('Score threshold 2 out of bounds', () => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'TestStack');
+
+    // THEN
+    expect(() => new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
+        allowedActions: ['test-action'],
+        reCaptchaSecretKey: SecretKey.fromPlainText('secret'),
+        scoreThreshold: 2
+    })).toThrowError('scoreThreshold must be between 0.0 and 1.0');
+});
+
+test('Score threshold 0.0 within bounds', () => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'TestStack');
+    const api = new apigateway.RestApi(stack, 'TestAPI');
+
+    // WHEN
+    const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
+        allowedActions: ['test-action'],
+        reCaptchaSecretKey: SecretKey.fromPlainText('secret'),
+        scoreThreshold: 0.0
+    });
+
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
+
+    // THEN
+    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+        Environment: {
+            Variables: {
+                ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0',
+                SECRET_KEY: 'secret',
+                SECRET_KEY_TYPE: 'PLAIN_TEXT'
+            }
+        },
+        Handler: 'index.handler',
+        Runtime: 'nodejs12.x'
+    }));
+});
+
+test('Score threshold 1.0 within bounds', () => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'TestStack');
+    const api = new apigateway.RestApi(stack, 'TestAPI');
+
+    // WHEN
+    const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
+        allowedActions: ['test-action'],
+        reCaptchaSecretKey: SecretKey.fromPlainText('secret'),
+        scoreThreshold: 1.0
+    });
+
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
+
+    // THEN
+    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+        Environment: {
+            Variables: {
+                ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '1',
+                SECRET_KEY: 'secret',
+                SECRET_KEY_TYPE: 'PLAIN_TEXT'
+            }
+        },
+        Handler: 'index.handler',
+        Runtime: 'nodejs12.x'
+    }));
+});
+
+test('Score threshold 0.7 within bounds', () => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'TestStack');
+    const api = new apigateway.RestApi(stack, 'TestAPI');
+
+    // WHEN
+    const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
+        allowedActions: ['test-action'],
+        reCaptchaSecretKey: SecretKey.fromPlainText('secret'),
+        scoreThreshold: 0.7
+    });
+
+    api.root.addMethod('GET', new apigateway.MockIntegration(), {
+        authorizer
+    });
+
+    // THEN
+    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+        Environment: {
+            Variables: {
+                ALLOWED_ACTIONS: '["test-action"]',
+                SCORE_THRESHOLD: '0.7',
+                SECRET_KEY: 'secret',
+                SECRET_KEY_TYPE: 'PLAIN_TEXT'
+            }
+        },
+        Handler: 'index.handler',
+        Runtime: 'nodejs12.x'
     }));
 });

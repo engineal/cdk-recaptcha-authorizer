@@ -92,7 +92,7 @@ test('handler allows valid request', async () => {
     });
 });
 
-test('handler blocks invalid action', async () => {
+test('handler blocks rejected request', async () => {
     restore = mockedEnv({
         ALLOWED_ACTIONS: '["test-action"]',
         SECRET_KEY: 'test-secret-key',
@@ -104,11 +104,55 @@ test('handler blocks invalid action', async () => {
 
     mockedAxios.post.mockReturnValue(Promise.resolve({
         data: {
-            action: 'blocked-action',
+            action: 'test-action',
             // eslint-disable-next-line camelcase
             challenge_ts: new Date().toISOString(),
             hostname: 'example.com',
-            score: 0.9,
+            score: 0.1,
+            success: false
+        }
+    }));
+    // WHEN
+    const response = await lambda.handler(event);
+
+    // THEN
+    expect(mockedAxios.post).toBeCalledWith('https://www.google.com/recaptcha/api/siteverify', null, {
+        params: {
+            remoteip: '1.2.3.4',
+            response: 'test-token',
+            secret: 'test-secret-key'
+        }
+    });
+    expect(response).toEqual({
+        policyDocument: {
+            Statement: [{
+                Action: 'execute-api:Invoke',
+                Effect: 'Deny',
+                Resource: methodArn
+            }],
+            Version: '2012-10-17'
+        },
+        principalId: 'user'
+    });
+});
+
+test('handler blocks score below threshold', async () => {
+    restore = mockedEnv({
+        ALLOWED_ACTIONS: '["test-action"]',
+        SECRET_KEY: 'test-secret-key',
+        SECRET_KEY_TYPE: 'PLAIN_TEXT'
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require
+    const lambda = require('../lib/recaptcha-authorizer.function');
+
+    mockedAxios.post.mockReturnValue(Promise.resolve({
+        data: {
+            action: 'test-action',
+            // eslint-disable-next-line camelcase
+            challenge_ts: new Date().toISOString(),
+            hostname: 'example.com',
+            score: 0.1,
             success: true
         }
     }));
@@ -136,7 +180,7 @@ test('handler blocks invalid action', async () => {
     });
 });
 
-test('handler blocks rejected request', async () => {
+test('handler blocks invalid action', async () => {
     restore = mockedEnv({
         ALLOWED_ACTIONS: '["test-action"]',
         SECRET_KEY: 'test-secret-key',
@@ -148,12 +192,12 @@ test('handler blocks rejected request', async () => {
 
     mockedAxios.post.mockReturnValue(Promise.resolve({
         data: {
-            action: 'test-action',
+            action: 'blocked-action',
             // eslint-disable-next-line camelcase
             challenge_ts: new Date().toISOString(),
             hostname: 'example.com',
-            score: 0.1,
-            success: false
+            score: 0.9,
+            success: true
         }
     }));
     // WHEN

@@ -109,6 +109,9 @@ const generateAuthResponse = (effect: 'Allow' | 'Deny', methodArn: string): APIG
     principalId: 'user'
 });
 
+const DEFAULT_SCORE_THRESHOLD = 0.5;
+
+const scoreThreshold = process.env.SCORE_THRESHOLD ? Number(process.env.SCORE_THRESHOLD) : DEFAULT_SCORE_THRESHOLD;
 const allowedActions = process.env.ALLOWED_ACTIONS ? JSON.parse(process.env.ALLOWED_ACTIONS) : [];
 
 /**
@@ -122,7 +125,7 @@ export const handler = async (event: APIGatewayRequestAuthorizerEvent): Promise<
     const {methodArn, requestContext: {identity: {sourceIp}}} = event;
 
     if (!token) {
-        console.log('DENY: header X-reCAPTCHA-Token not found');
+        console.log(`DENY: IP: ${sourceIp}; ARN: ${methodArn}:`, 'X-reCAPTCHA-Token header missing');
 
         return generateAuthResponse('Deny', methodArn);
     }
@@ -134,20 +137,36 @@ export const handler = async (event: APIGatewayRequestAuthorizerEvent): Promise<
             secret: await getSecret()
         }
     });
+    const {data: {success, score, action, hostname}} = response;
 
-    if (!response.data.success) {
-        console.log(`DENY: score=${response.data.score}; IP: ${sourceIp}; Token: ${token}; ARN: ${methodArn}`);
-
-        return generateAuthResponse('Deny', methodArn);
-    }
-
-    if (!allowedActions.includes(response.data.action)) {
-        console.log(`DENY: reCAPTCHA action=${response.data.action} not allowed`);
+    if (!success) {
+        console.log(
+            `DENY: IP: ${sourceIp}; ARN: ${methodArn}; hostname: ${hostname}; score: ${score}; action: ${action}:`,
+            `X-reCAPTCHA-Token: "${token}" not valid`
+        );
 
         return generateAuthResponse('Deny', methodArn);
     }
 
-    console.log(`ALLOW: score=${response.data.score}; IP: ${sourceIp}; Token: ${token}; ARN: ${methodArn}`);
+    if (score < scoreThreshold) {
+        console.log(
+            `DENY: IP: ${sourceIp}; ARN: ${methodArn}; hostname: ${hostname}; score: ${score}; action: ${action}:`,
+            `Score less than threshold: ${scoreThreshold}`
+        );
+
+        return generateAuthResponse('Deny', methodArn);
+    }
+
+    if (!allowedActions.includes(action)) {
+        console.log(
+            `DENY: IP: ${sourceIp}; ARN: ${methodArn}; hostname: ${hostname}; score: ${score}; action: ${action}:`,
+            `Action not in allowed actions: ${allowedActions}`
+        );
+
+        return generateAuthResponse('Deny', methodArn);
+    }
+
+    console.log(`ALLOW: IP: ${sourceIp}; ARN: ${methodArn}; hostname: ${hostname}; score: ${score}; action: ${action}`);
 
     return generateAuthResponse('Allow', methodArn);
 };
