@@ -26,7 +26,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.45.0",
+    "@aws-cdk/assert": "^1.49.1",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
     "@types/aws-lambda": "^8.10.56",
@@ -37,30 +37,27 @@
     "eslint": "^7.2.0",
     "jest": "^25.5.4",
     "mocked-env": "^1.3.2",
-    "parcel-plugin-externals": "^0.5.0",
     "semantic-release": "^17.0.8",
     "ts-jest": "^25.5.1",
     "typescript": "~3.9.5"
   },
   "peerDependencies": {
-    "@aws-cdk/aws-apigateway": "^1.45.0",
-    "@aws-cdk/aws-lambda": "^1.45.0",
-    "@aws-cdk/aws-secretsmanager": "^1.45.0",
-    "@aws-cdk/aws-ssm": "^1.45.0",
-    "@aws-cdk/core": "1.45.0"
+    "@aws-cdk/aws-apigateway": "^1.49.1",
+    "@aws-cdk/aws-lambda": "^1.49.1",
+    "@aws-cdk/aws-secretsmanager": "^1.49.1",
+    "@aws-cdk/aws-ssm": "^1.49.1",
+    "@aws-cdk/core": "1.49.1"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.45.0",
-    "@aws-cdk/aws-iam": "^1.45.0",
-    "@aws-cdk/aws-lambda": "^1.45.0",
-    "@aws-cdk/aws-lambda-nodejs": "^1.45.0",
-    "@aws-cdk/aws-secretsmanager": "^1.45.0",
-    "@aws-cdk/aws-ssm": "^1.45.0",
-    "@aws-cdk/core": "1.45.0",
+    "@aws-cdk/aws-apigateway": "^1.49.1",
+    "@aws-cdk/aws-iam": "^1.49.1",
+    "@aws-cdk/aws-lambda": "^1.49.1",
+    "@aws-cdk/aws-lambda-nodejs": "^1.49.1",
+    "@aws-cdk/aws-secretsmanager": "^1.49.1",
+    "@aws-cdk/aws-ssm": "^1.49.1",
+    "@aws-cdk/core": "^1.49.1",
     "aws-sdk": "^2.695.0",
+    "aws-xray-sdk": "^3.1.0",
     "axios": "^0.19.2"
-  },
-  "externals": [
-    "aws-sdk"
-  ]
+  }
 }

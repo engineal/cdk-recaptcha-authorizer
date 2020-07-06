@@ -1,19 +1,11 @@
 /* eslint-disable no-process-env,no-console */
 import * as AWS from 'aws-sdk';
+import * as xray from 'aws-xray-sdk';
 import {APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent} from 'aws-lambda';
 import axios from 'axios';
 
-/*
- * TODO: capture AWS clients with xray
- * Due to https://github.com/parcel-bundler/parcel/issues/3151 and https://github.com/aws/aws-cdk/issues/7779,
- * the parcel build breaks with aws-xray-sdk
- *
- * import * as xray from 'aws-xray-sdk';
- * const secretsManagerClient = xray.captureAWSClient(new AWS.SecretsManager());
- * const ssmClient = xray.captureAWSClient(new AWS.SSM());
- */
-const secretsManagerClient = new AWS.SecretsManager();
-const ssmClient = new AWS.SSM();
+const secretsManagerClient = xray.captureAWSClient(new AWS.SecretsManager());
+const ssmClient = xray.captureAWSClient(new AWS.SSM());
 
 /**
  * @returns {Promise<string>} the secret key value stored in SSM Parameter Store

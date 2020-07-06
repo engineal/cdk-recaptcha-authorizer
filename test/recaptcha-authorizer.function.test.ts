@@ -18,13 +18,9 @@ jest.mock('aws-sdk', () => ({
     }))
 }));
 
-/*
- * TODO: add back when aws-xray-sdk is enabled
- *
- * jest.mock('aws-xray-sdk', () => ({
- *     captureAWSClient: (client: any) => client
- * }));
- */
+jest.mock('aws-xray-sdk', () => ({
+    captureAWSClient: <T>(client: T) => client
+}));
 
 // eslint-disable-next-line init-declarations
 let restore: RestoreFn | undefined;

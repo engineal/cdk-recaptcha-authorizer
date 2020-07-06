@@ -7,8 +7,7 @@ node_modules
 .cdk.staging
 cdk.out
 
-# Parcel build directories
-.cache
-.build
+# Parcel default cache directory
+.parcel-cache
 
 .idea
