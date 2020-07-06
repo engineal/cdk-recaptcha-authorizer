@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.1.0...v1.2.0) (2020-07-06)
+
+
+### Features
+
+* capture AWS clients with X-Ray ([247fd45](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/247fd4587ba7a24ba8cf3a0ccaa0bb1adc71c84b))
+
 # [1.1.0](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.0.3...v1.1.0) (2020-06-19)
 
 
