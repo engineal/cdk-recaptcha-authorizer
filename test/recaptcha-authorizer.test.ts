@@ -116,6 +116,7 @@ test('Lambda Function Created with secrets manager secret key', () => {
     }));
 });
 
+// eslint-disable-next-line max-lines-per-function
 test('Lambda Function Created with secrets manager and json field', () => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, 'TestStack');
