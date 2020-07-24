@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.2.0...v1.2.1) (2020-07-24)
+
+
+### Bug Fixes
+
+* lint error in test ([fba6916](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/fba691674a609d65e2bad2d2489e748561ea00f6))
+* **deps:** update aws-cdk ([f67d578](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/f67d5780d5a6df007e5cb7c4cb822a8df7ad2a73))
+
 # [1.2.0](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.1.0...v1.2.0) (2020-07-06)
 
 
