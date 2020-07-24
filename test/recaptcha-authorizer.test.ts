@@ -24,6 +24,7 @@ test('Lambda Function Created with plain text secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0.5',
                 SECRET_KEY: 'secret',
                 SECRET_KEY_TYPE: 'PLAIN_TEXT'
@@ -53,6 +54,7 @@ test('Lambda Function Created with ssm secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_PARAMETER: 'test-secret-key',
                 SECRET_KEY_TYPE: 'SSM_PARAMETER'
@@ -84,6 +86,7 @@ test('Lambda Function Created with secrets manager secret key', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_SECRET_ARN: {
                     'Fn::Join': [
@@ -134,6 +137,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0.5',
                 SECRET_KEY_FIELD: 'test-field',
                 SECRET_KEY_SECRET_ARN: {
@@ -365,6 +369,7 @@ test('Score threshold 0.0 within bounds', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0',
                 SECRET_KEY: 'secret',
                 SECRET_KEY_TYPE: 'PLAIN_TEXT'
@@ -396,6 +401,7 @@ test('Score threshold 1.0 within bounds', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '1',
                 SECRET_KEY: 'secret',
                 SECRET_KEY_TYPE: 'PLAIN_TEXT'
@@ -427,6 +433,7 @@ test('Score threshold 0.7 within bounds', () => {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
+                AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
                 SCORE_THRESHOLD: '0.7',
                 SECRET_KEY: 'secret',
                 SECRET_KEY_TYPE: 'PLAIN_TEXT'
