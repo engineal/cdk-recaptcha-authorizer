@@ -7,8 +7,7 @@ import {RecaptchaAuthorizer, SecretKey} from '../lib';
 import {expect as expectCDK, haveResource} from '@aws-cdk/assert';
 
 test('Lambda Function Created with plain text secret key', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     // WHEN
     const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -36,8 +35,7 @@ test('Lambda Function Created with plain text secret key', () => {
 });
 
 test('Lambda Function Created with ssm secret key', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
@@ -66,8 +64,7 @@ test('Lambda Function Created with ssm secret key', () => {
 });
 
 test('Lambda Function Created with secrets manager secret key', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
         secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
@@ -116,10 +113,8 @@ test('Lambda Function Created with secrets manager secret key', () => {
     }));
 });
 
-// eslint-disable-next-line max-lines-per-function
 test('Lambda Function Created with secrets manager and json field', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
         secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
@@ -170,8 +165,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
 });
 
 test('Request Authorizer Created', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     // WHEN
     const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -219,8 +213,7 @@ test('Request Authorizer Created', () => {
 
 // eslint-disable-next-line max-lines-per-function
 test('SSM parameter read granted', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeyParameter = ssm.StringParameter.fromStringParameterName(stack, 'TestParameter', 'test-secret-key');
     // WHEN
@@ -273,8 +266,7 @@ test('SSM parameter read granted', () => {
 
 // eslint-disable-next-line max-lines-per-function
 test('Secrets Manager read granted', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
         secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
@@ -326,8 +318,7 @@ test('Secrets Manager read granted', () => {
 });
 
 test('Score threshold -3 out of bounds', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
 
     // THEN
     expect(() => new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -338,8 +329,7 @@ test('Score threshold -3 out of bounds', () => {
 });
 
 test('Score threshold 2 out of bounds', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
 
     // THEN
     expect(() => new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -350,8 +340,7 @@ test('Score threshold 2 out of bounds', () => {
 });
 
 test('Score threshold 0.0 within bounds', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
 
     // WHEN
@@ -382,8 +371,7 @@ test('Score threshold 0.0 within bounds', () => {
 });
 
 test('Score threshold 1.0 within bounds', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
 
     // WHEN
@@ -414,8 +402,7 @@ test('Score threshold 1.0 within bounds', () => {
 });
 
 test('Score threshold 0.7 within bounds', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'TestStack');
+    const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
 
     // WHEN
