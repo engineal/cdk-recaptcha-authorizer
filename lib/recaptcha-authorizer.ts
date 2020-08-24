@@ -52,6 +52,11 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
 
     private authorizer: RequestAuthorizer;
 
+    /**
+     * The authorization type of this authorizer.
+     */
+    readonly authorizationType?: AuthorizationType;
+
     constructor(scope: Construct, id: string, props: RecaptchaAuthorizerProps) {
         super(scope, id);
 
@@ -80,6 +85,7 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
             handler,
             identitySources: [IdentitySource.header('X-reCAPTCHA-Token')]
         });
+        this.authorizationType = this.authorizer.authorizationType;
     }
 
     /**
@@ -88,21 +94,6 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
      */
     get authorizerId(): string {
         return this.authorizer.authorizerId;
-    }
-
-    /**
-     * The authorization type of this authorizer.
-     */
-    get authorizationType(): AuthorizationType | undefined {
-        return this.authorizer.authorizationType;
-    }
-
-    /**
-     * The authorization type of this authorizer.
-     */
-    // eslint-disable-next-line class-methods-use-this
-    set authorizationType(authorizationType: AuthorizationType | undefined) {
-        // This is readonly, do nothing
     }
 
     /**
