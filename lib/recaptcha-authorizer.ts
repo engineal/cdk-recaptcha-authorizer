@@ -6,10 +6,10 @@ import {
     RequestAuthorizer,
     RestApi
 } from '@aws-cdk/aws-apigateway';
+import {Runtime, Tracing} from '@aws-cdk/aws-lambda';
 import {Construct} from '@aws-cdk/core';
 import {NodejsFunction} from '@aws-cdk/aws-lambda-nodejs';
 import {SecretKey} from './secret-key';
-import {Tracing} from '@aws-cdk/aws-lambda';
 
 export interface RecaptchaAuthorizerProps {
 
@@ -67,13 +67,16 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
         }
 
         const handler = new NodejsFunction(this, 'function', {
+            bundling: {
+                minify: true
+            },
             environment: {
                 ALLOWED_ACTIONS: JSON.stringify(props.allowedActions),
                 SCORE_THRESHOLD: scoreThreshold.toString(),
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
             },
-            minify: true,
+            runtime: Runtime.NODEJS_14_X,
             tracing: props.tracing
         });
 
