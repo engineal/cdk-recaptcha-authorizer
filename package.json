@@ -1,6 +1,6 @@
 {
   "name": "@engineal/aws-cdk-recaptcha-authorizer",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "An AWS CDK library that provides a reCaptcha Authorizer for API Gateway REST APIs",
   "author": "Aaron Lucia <alucia@engineal.com>",
   "license": "Apache-2.0",

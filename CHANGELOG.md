@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.2.3...v1.2.4) (2021-04-11)
+
+
+### Bug Fixes
+
+* update aws-cdk ([#325](https://github.com/engineal/aws-cdk-recaptcha-authorizer/issues/325)) ([d966325](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/d9663250193d487cb1ab9635c4aa54dc1f2ef357))
+
 ## [1.2.3](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.2.2...v1.2.3) (2020-08-24)
 
 
