@@ -30,7 +30,7 @@ test('Lambda Function Created with plain text secret key', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -59,7 +59,7 @@ test('Lambda Function Created with ssm secret key', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -109,7 +109,7 @@ test('Lambda Function Created with secrets manager secret key', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -160,7 +160,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -366,7 +366,7 @@ test('Score threshold 0.0 within bounds', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -397,7 +397,7 @@ test('Score threshold 1.0 within bounds', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
 
@@ -428,6 +428,6 @@ test('Score threshold 0.7 within bounds', () => {
             }
         },
         Handler: 'index.handler',
-        Runtime: 'nodejs12.x'
+        Runtime: 'nodejs14.x'
     }));
 });
