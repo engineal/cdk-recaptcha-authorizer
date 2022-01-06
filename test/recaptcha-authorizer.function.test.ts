@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import mockedEnv, {RestoreFn} from 'mocked-env';
 import axios from 'axios';
-import {mocked} from 'ts-jest/utils';
+import {mocked} from 'jest-mock';
 
 jest.mock('axios');
 const mockedAxios = mocked(axios, true);

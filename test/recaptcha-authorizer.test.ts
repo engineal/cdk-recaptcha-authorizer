@@ -1,10 +1,10 @@
 /* eslint-disable max-lines */
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as cdk from '@aws-cdk/core';
-import * as secretsmanager from '@aws-cdk/aws-secretsmanager';
-import * as ssm from '@aws-cdk/aws-ssm';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as cdk from 'aws-cdk-lib/core';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import {RecaptchaAuthorizer, SecretKey} from '../lib';
-import {expect as expectCDK, haveResource} from '@aws-cdk/assert';
+import {Template} from 'aws-cdk-lib/assertions';
 
 test('Lambda Function Created with plain text secret key', () => {
     const stack = new cdk.Stack();
@@ -19,7 +19,9 @@ test('Lambda Function Created with plain text secret key', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -31,7 +33,7 @@ test('Lambda Function Created with plain text secret key', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
 test('Lambda Function Created with ssm secret key', () => {
@@ -48,7 +50,9 @@ test('Lambda Function Created with ssm secret key', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -60,14 +64,15 @@ test('Lambda Function Created with ssm secret key', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
+// eslint-disable-next-line max-lines-per-function
 test('Lambda Function Created with secrets manager secret key', () => {
     const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
-        secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
+        secretPartialArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
     });
     // WHEN
     const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -79,7 +84,9 @@ test('Lambda Function Created with secrets manager secret key', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -110,14 +117,15 @@ test('Lambda Function Created with secrets manager secret key', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
+// eslint-disable-next-line max-lines-per-function
 test('Lambda Function Created with secrets manager and json field', () => {
     const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
-        secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
+        secretPartialArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
     });
     // WHEN
     const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -129,7 +137,9 @@ test('Lambda Function Created with secrets manager and json field', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -161,7 +171,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
 test('Request Authorizer Created', () => {
@@ -177,7 +187,9 @@ test('Request Authorizer Created', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::ApiGateway::Authorizer', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::ApiGateway::Authorizer', {
         AuthorizerUri: {
             'Fn::Join': [
                 '',
@@ -203,12 +215,14 @@ test('Request Authorizer Created', () => {
         },
         IdentitySource: 'method.request.header.X-reCAPTCHA-Token',
         Type: 'REQUEST'
-    }).and(haveResource('AWS::ApiGateway::Method', {
+    });
+
+    template.hasResourceProperties('AWS::ApiGateway::Method', {
         AuthorizationType: 'CUSTOM',
         AuthorizerId: {
             Ref: 'TestAuthorizer64D89012'
         }
-    })));
+    });
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -226,7 +240,9 @@ test('SSM parameter read granted', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::IAM::Policy', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::IAM::Policy', {
         PolicyDocument: {
             Statement: [
                 {
@@ -261,7 +277,7 @@ test('SSM parameter read granted', () => {
             ],
             Version: '2012-10-17'
         }
-    }));
+    });
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -269,7 +285,7 @@ test('Secrets Manager read granted', () => {
     const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
     const secretKeySecret = secretsmanager.Secret.fromSecretAttributes(stack, 'TestSecret', {
-        secretArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
+        secretPartialArn: `arn:${stack.partition}:secretsmanager:${stack.region}:${stack.account}:secret:test-secret`
     });
     // WHEN
     const authorizer = new RecaptchaAuthorizer(stack, 'TestAuthorizer', {
@@ -281,7 +297,9 @@ test('Secrets Manager read granted', () => {
         authorizer
     });
     // THEN
-    expectCDK(stack).to(haveResource('AWS::IAM::Policy', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::IAM::Policy', {
         PolicyDocument: {
             Statement: [
                 {
@@ -306,7 +324,7 @@ test('Secrets Manager read granted', () => {
                                 {
                                     Ref: 'AWS::AccountId'
                                 },
-                                ':secret:test-secret'
+                                ':secret:test-secret-??????'
                             ]
                         ]
                     }
@@ -314,7 +332,7 @@ test('Secrets Manager read granted', () => {
             ],
             Version: '2012-10-17'
         }
-    }));
+    });
 });
 
 test('Score threshold -3 out of bounds', () => {
@@ -355,7 +373,9 @@ test('Score threshold 0.0 within bounds', () => {
     });
 
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -367,7 +387,7 @@ test('Score threshold 0.0 within bounds', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
 test('Score threshold 1.0 within bounds', () => {
@@ -386,7 +406,9 @@ test('Score threshold 1.0 within bounds', () => {
     });
 
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -398,7 +420,7 @@ test('Score threshold 1.0 within bounds', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });
 
 test('Score threshold 0.7 within bounds', () => {
@@ -417,7 +439,9 @@ test('Score threshold 0.7 within bounds', () => {
     });
 
     // THEN
-    expectCDK(stack).to(haveResource('AWS::Lambda::Function', {
+    const template = Template.fromStack(stack);
+
+    template.hasResourceProperties('AWS::Lambda::Function', {
         Environment: {
             Variables: {
                 ALLOWED_ACTIONS: '["test-action"]',
@@ -429,5 +453,5 @@ test('Score threshold 0.7 within bounds', () => {
         },
         Handler: 'index.handler',
         Runtime: 'nodejs14.x'
-    }));
+    });
 });

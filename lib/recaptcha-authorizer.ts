@@ -1,14 +1,7 @@
-import {
-    AuthorizationType,
-    Authorizer,
-    IAuthorizer,
-    IdentitySource,
-    RequestAuthorizer,
-    RestApi
-} from '@aws-cdk/aws-apigateway';
-import {Runtime, Tracing} from '@aws-cdk/aws-lambda';
-import {Construct} from '@aws-cdk/core';
-import {NodejsFunction} from '@aws-cdk/aws-lambda-nodejs';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambdaNodeJS from 'aws-cdk-lib/aws-lambda-nodejs';
+import {Construct} from 'constructs';
 import {SecretKey} from './secret-key';
 
 export interface RecaptchaAuthorizerProps {
@@ -35,7 +28,7 @@ export interface RecaptchaAuthorizerProps {
      *
      * @default Tracing.Disabled
      */
-    readonly tracing?: Tracing;
+    readonly tracing?: lambda.Tracing;
 
 }
 
@@ -48,14 +41,14 @@ const DEFAULT_SCORE_THRESHOLD = 0.5;
  *
  * @resource AWS::ApiGateway::Authorizer
  */
-export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
+export class RecaptchaAuthorizer extends apigateway.Authorizer implements apigateway.IAuthorizer {
 
-    private authorizer: RequestAuthorizer;
+    private authorizer: apigateway.RequestAuthorizer;
 
     /**
      * The authorization type of this authorizer.
      */
-    readonly authorizationType?: AuthorizationType;
+    readonly authorizationType?: apigateway.AuthorizationType;
 
     constructor(scope: Construct, id: string, props: RecaptchaAuthorizerProps) {
         super(scope, id);
@@ -66,7 +59,7 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
             throw new Error('scoreThreshold must be between 0.0 and 1.0');
         }
 
-        const handler = new NodejsFunction(this, 'function', {
+        const handler = new lambdaNodeJS.NodejsFunction(this, 'function', {
             bundling: {
                 minify: true
             },
@@ -76,7 +69,7 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
             },
-            runtime: Runtime.NODEJS_14_X,
+            runtime: lambda.Runtime.NODEJS_14_X,
             tracing: props.tracing
         });
 
@@ -84,9 +77,9 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
             props.reCaptchaSecretKey.grantRead(handler);
         }
 
-        this.authorizer = new RequestAuthorizer(this, 'Authorizer', {
+        this.authorizer = new apigateway.RequestAuthorizer(this, 'Authorizer', {
             handler,
-            identitySources: [IdentitySource.header('X-reCAPTCHA-Token')]
+            identitySources: [apigateway.IdentitySource.header('X-reCAPTCHA-Token')]
         });
         this.authorizationType = this.authorizer.authorizationType;
     }
@@ -105,7 +98,7 @@ export class RecaptchaAuthorizer extends Authorizer implements IAuthorizer {
      * @returns {void}
      * @param {RestApi} restApi the rest API to attach this authorizer to
      */
-    public _attachToApi(restApi: RestApi): void {
+    public _attachToApi(restApi: apigateway.RestApi): void {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         // eslint-disable-next-line no-underscore-dangle
