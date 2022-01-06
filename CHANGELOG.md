@@ -1,3 +1,23 @@
+# [2.0.0](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.2.4...v2.0.0) (2022-01-06)
+
+
+### Bug Fixes
+
+* disable husky in CI environment ([e8caece](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/e8caeceef1cc4ddf99cdf2ad04591357747b288e))
+
+
+### chore
+
+* update to AWS CDK v2 ([#527](https://github.com/engineal/aws-cdk-recaptcha-authorizer/issues/527)) ([0aa4279](https://github.com/engineal/aws-cdk-recaptcha-authorizer/commit/0aa4279439fa7c19082f65a68bb56c58ff81c7a7))
+
+
+### BREAKING CHANGES
+
+* The version of the AWS CDK has been upgraded to v2.
+Consumers of this library will also need to upgrade to v2.
+
+* build: use latest CodeQL workflow
+
 ## [1.2.4](https://github.com/engineal/aws-cdk-recaptcha-authorizer/compare/v1.2.3...v1.2.4) (2021-04-11)
 
 
