@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.0.0...v2.1.0) (2022-01-17)
+
+
+### Bug Fixes
+
+* jsii-publish version ([e3d4311](https://github.com/engineal/cdk-recaptcha-authorizer/commit/e3d4311dc58310f6e120a761ab1789b32292a00f))
+
+
+### Features
+
+* build with jsii ([071c06f](https://github.com/engineal/cdk-recaptcha-authorizer/commit/071c06f3cf4c37f5eda478ec8385ce190f7dd89e))
+
 # [2.0.0](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v1.2.4...v2.0.0) (2022-01-06)
 
 
