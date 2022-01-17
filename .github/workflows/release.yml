@@ -22,28 +22,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release
       - name: build
-        uses: udondan/jsii-publish@v0.12
+        uses: udondan/jsii-publish@v0.12.0
         if: steps.release.outputs.VERSION
         with:
           BUILD_SOURCE: true
           BUILD_PACKAGES: true
       - name: Publish to npm
-        uses: udondan/jsii-publish@v0.12
+        uses: udondan/jsii-publish@v0.12.0
         if: steps.release.outputs.VERSION
         with:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish to PyPI
-        uses: udondan/jsii-publish@v0.12
+        uses: udondan/jsii-publish@v0.12.0
         if: steps.release.outputs.VERSION
         with:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       - name: Publish to NuGet
-        uses: udondan/jsii-publish@v0.12
+        uses: udondan/jsii-publish@v0.12.0
         if: steps.release.outputs.VERSION
         with:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
       - name: Publish to Maven GitHub
-        uses: udondan/jsii-publish@v0.12
+        uses: udondan/jsii-publish@v0.12.0
         if: steps.release.outputs.VERSION
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
