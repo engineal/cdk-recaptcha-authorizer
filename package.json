@@ -7,7 +7,7 @@
   "homepage": "https://github.com/engineal/cdk-recaptcha-authorizer#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/engineal/cdk-recaptcha-authorizer.git"
+    "url": "https://github.com/engineal/cdk-recaptcha-authorizer.git"
   },
   "keywords": [
     "cdk",
