@@ -42,11 +42,16 @@ export abstract class SecretKey {
      * content of the secret is used.
      */
     public static fromSecretsManager(secretKeySecret: secretsmanager.ISecret, field?: string): SecretKey {
+        const environment: { [key: string]: string } = {
+            SECRET_KEY_SECRET_ARN: secretKeySecret.secretArn
+        };
+
+        if (field) {
+            environment.SECRET_KEY_FIELD = field;
+        }
+
         return {
-            environment: {
-                SECRET_KEY_FIELD: field,
-                SECRET_KEY_SECRET_ARN: secretKeySecret.secretArn
-            },
+            environment,
             grantRead: grantee => secretKeySecret.grantRead(grantee),
             secretKeyType: 'SECRETS_MANAGER'
         };
@@ -60,7 +65,7 @@ export abstract class SecretKey {
     /**
      * Key-value pairs that should be added as environment variables to the Lambda
      */
-    abstract readonly environment: { [key: string]: string | undefined }
+    abstract readonly environment: { [key: string]: string }
 
     /**
      * Grants reading the secret to a principal

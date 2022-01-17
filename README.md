@@ -1,14 +1,7 @@
-![Node.js CI](https://github.com/engineal/aws-cdk-recaptcha-authorizer/workflows/Node.js%20CI/badge.svg)
-![npm (scoped)](https://img.shields.io/npm/v/@engineal/aws-cdk-recaptcha-authorizer)
-![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@engineal/aws-cdk-recaptcha-authorizer)
-![Snyk Vulnerabilities for npm scoped package](https://img.shields.io/snyk/vulnerabilities/npm/@engineal/aws-cdk-recaptcha-authorizer)
-![Libraries.io dependency status for latest release, scoped npm package](https://img.shields.io/librariesio/release/npm/@engineal/aws-cdk-recaptcha-authorizer)
-![NPM](https://img.shields.io/npm/l/@engineal/aws-cdk-recaptcha-authorizer)
-
 ## Google reCAPTCHA API Gateway REST API authorizer
 
-This library provides an API Gateway REST API authorizer CDK construct that uses Google's reCAPTCHA service to
-detect abusive traffic and allow or deny access to the API methods.
+This construct provides an API Gateway REST API authorizer that uses Google's reCAPTCHA service to detect abusive
+traffic and allow or deny access to the API methods.
 
 It currently only supports v3 of the reCAPTCHA service.
 
@@ -17,7 +10,7 @@ your client code executes the reCAPTCHA client, the returned token from the Goog
 should be included in the API Gateway request in the `X-reCAPTCHA-Token` header.
 
 The `RecaptchaAuthorizer` can be used similarly to the `TokenAuthorizer` and `RequestAuthorizer` that are
-provided by the `@aws-cdk/aws-apigateway` package. It accepts 3 properties:
+provided by the `aws-cdk-lib/aws-apigateway` package. It accepts 3 properties:
 
 * `scoreThreshold` (default: 0.5) is the threshold below which requests will be denied.
 * `allowedActions` is a list of allowed actions. When your frontend executes the reCAPTCHA client, it provides
@@ -73,13 +66,14 @@ SecretKey.fromSecretsManager(secret, 'my-secret-field')
 
 ### Useful commands
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
+ * `npm run build`   compile the project
+ * `npm run watch`   watch for changes and compile as needed
+ * `npm run package` generates libraries for all languages
  * `npm run test`    perform the jest unit tests
 
 ## License
 
-   Copyright 2020 Aaron Lucia
+   Copyright 2022 Aaron Lucia
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

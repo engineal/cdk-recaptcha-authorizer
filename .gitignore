@@ -11,3 +11,9 @@ cdk.out
 .parcel-cache
 
 .idea
+
+# Exclude jsii outdir
+dist
+.jsii
+tsconfig.json
+tsconfig.tsbuildinfo

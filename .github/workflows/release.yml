@@ -16,14 +16,35 @@ jobs:
           node-version: 16
       - name: install
         run: npm ci
-      - name: lint
-        run: npm run lint
-      - name: build
-        run: npm run build
-      - name: test
-        run: npm test
       - name: release
+        id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
+      - name: build
+        uses: udondan/jsii-publish@v0.12
+        if: steps.release.outputs.VERSION
+        with:
+          BUILD_SOURCE: true
+          BUILD_PACKAGES: true
+      - name: Publish to npm
+        uses: udondan/jsii-publish@v0.12
+        if: steps.release.outputs.VERSION
+        with:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to PyPI
+        uses: udondan/jsii-publish@v0.12
+        if: steps.release.outputs.VERSION
+        with:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      - name: Publish to NuGet
+        uses: udondan/jsii-publish@v0.12
+        if: steps.release.outputs.VERSION
+        with:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - name: Publish to Maven GitHub
+        uses: udondan/jsii-publish@v0.12
+        if: steps.release.outputs.VERSION
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

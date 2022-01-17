@@ -17,3 +17,9 @@ test
 .releaserc
 jest.config.js
 tsconfig.json
+
+# Exclude jsii outdir
+dist
+
+# Include .jsii
+!.jsii
