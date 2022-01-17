@@ -1,18 +1,18 @@
 {
-  "name": "@engineal/aws-cdk-recaptcha-authorizer",
+  "name": "cdk-recaptcha-authorizer",
   "version": "2.0.0",
   "description": "An AWS CDK library that provides a reCaptcha Authorizer for API Gateway REST APIs",
   "author": "Aaron Lucia <alucia@engineal.com>",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/engineal/aws-cdk-recaptcha-authorizer#readme",
+  "homepage": "https://github.com/engineal/cdk-recaptcha-authorizer#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/engineal/aws-cdk-recaptcha-authorizer.git"
+    "url": "git+https://github.com/engineal/cdk-recaptcha-authorizer.git"
   },
   "keywords": [
-    "aws",
     "cdk",
     "constructs",
+    "aws",
     "apigateway",
     "lambda",
     "recaptcha"
@@ -22,35 +22,44 @@
   "scripts": {
     "prepare": "is-ci || husky install",
     "lint": "eslint . --ignore-pattern=**/*.js --ignore-pattern=**/*.d.ts",
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "jsii",
+    "watch": "jsii --watch",
+    "package": "jsii-pacmak",
     "test": "jest"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",
     "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@types/aws-lambda": "^8.10.61",
     "@types/jest": "^27.4.0",
     "@types/node": "16.11.19",
-    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.9.0",
-    "aws-cdk-lib": "2.3.0",
-    "constructs": "^10.0.0",
+    "aws-cdk-lib": "2.8.0",
+    "constructs": "10.0.0",
     "eslint": "^8.6.0",
     "husky": "^7.0.0",
     "is-ci": "^3.0.1",
     "jest": "^27.4.7",
+    "jsii": "^1.52.1",
+    "jsii-pacmak": "^1.52.1",
     "mocked-env": "^1.3.2",
     "semantic-release": "^18.0.1",
     "ts-jest": "^27.1.2",
     "typescript": "~4.5.4"
   },
   "peerDependencies": {
-    "aws-cdk-lib": "2.3.0",
+    "aws-cdk-lib": "2.8.0",
     "constructs": "^10.0.0"
   },
+  "bundledDependencies": [
+    "aws-sdk",
+    "aws-xray-sdk",
+    "axios"
+  ],
   "dependencies": {
     "aws-sdk": "^2.739.0",
     "aws-xray-sdk": "^3.1.0",
@@ -60,5 +69,27 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "stability": "experimental",
+  "jsii": {
+    "outdir": "dist",
+    "versionFormat": "full",
+    "targets": {
+      "java": {
+        "package": "com.engineal.cdk.recaptchaauthorizer",
+        "maven": {
+          "groupId": "com.engineal.cdk",
+          "artifactId": "recaptcha-authorizer"
+        }
+      },
+      "python": {
+        "distName": "cdk-recaptcha-authorizer",
+        "module": "cdk_recaptcha_authorizer"
+      },
+      "dotnet": {
+        "namespace": "EngineAL.CDK.RecaptchaAuthorizer",
+        "packageId": "EngineAL.CDK.RecaptchaAuthorizer"
+      }
+    }
   }
 }
