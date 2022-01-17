@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.0...v2.1.1) (2022-01-17)
+
+
+### Bug Fixes
+
+* use jsii-release instead ([9bf8583](https://github.com/engineal/cdk-recaptcha-authorizer/commit/9bf8583e297830a2877f4180078a8f01e767191f))
+
 # [2.1.0](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.0.0...v2.1.0) (2022-01-17)
 
 
