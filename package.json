@@ -25,6 +25,7 @@
     "build": "jsii",
     "watch": "jsii --watch",
     "package": "jsii-pacmak",
+    "release": "jsii-release",
     "test": "jest"
   },
   "devDependencies": {
@@ -46,6 +47,7 @@
     "jest": "^27.4.7",
     "jsii": "^1.52.1",
     "jsii-pacmak": "^1.52.1",
+    "jsii-release": "^0.2.233",
     "mocked-env": "^1.3.2",
     "semantic-release": "^18.0.1",
     "ts-jest": "^27.1.2",

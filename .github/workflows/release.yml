@@ -20,31 +20,12 @@ jobs:
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
-      - name: build
-        uses: udondan/jsii-publish@v0.12.0
-        if: steps.release.outputs.VERSION
-        with:
-          BUILD_SOURCE: true
-          BUILD_PACKAGES: true
-      - name: Publish to npm
-        uses: udondan/jsii-publish@v0.12.0
-        if: steps.release.outputs.VERSION
-        with:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Publish to PyPI
-        uses: udondan/jsii-publish@v0.12.0
-        if: steps.release.outputs.VERSION
-        with:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      - name: Publish to NuGet
-        uses: udondan/jsii-publish@v0.12.0
-        if: steps.release.outputs.VERSION
-        with:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
-      - name: Publish to Maven GitHub
-        uses: udondan/jsii-publish@v0.12.0
-        if: steps.release.outputs.VERSION
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          MAVEN_SERVER_ID: "github"
+          MAVEN_USERNAME: ${{ github.actor }}
+          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_REPOSITORY_URL: "https://maven.pkg.github.com/${{ github.repository }}"
+          NUGET_API_KEY: ${{ secrets.NUGET_TOKEN }}
+          TWINE_USERNAME: "__token__"
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: npx semantic-release

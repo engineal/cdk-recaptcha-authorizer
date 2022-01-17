@@ -1,16 +1,16 @@
 {
-  "branches": ["main"],
-  "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator",
-    "@semantic-release/changelog",
-    ["@semantic-release/npm", {
-      "npmPublish": false
-    }],
-    "@semantic-release/github",
-    "@semantic-release/git",
-    ["@semantic-release/exec", {
-      "publishCmd": "echo ::set-output name=VERSION::${nextRelease.version}"
-    }]
-  ]
+    "branches": ["main"],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        "@semantic-release/changelog",
+        ["@semantic-release/npm", {
+            "npmPublish": false
+        }],
+        ["@semantic-release/exec", {
+            "publishCmd": "npm run build && npm run package && npm run release"
+        }],
+        "@semantic-release/github",
+        "@semantic-release/git"
+    ]
 }
