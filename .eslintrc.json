@@ -1,16 +1,19 @@
 {
   "env": {
-    "es2020": true,
+    "es2021": true,
     "node": true
   },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
+  ],
+  "ignorePatterns": [
+    "*.js",
+    "*.d.ts"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 11,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "plugins": [
