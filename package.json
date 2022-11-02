@@ -37,7 +37,7 @@
     "@types/aws-lambda": "^8.10.108",
     "@types/jest": "^27.5.2",
     "@types/node": "^18.11.9",
-    "@types/prettier": "2.6.0",
+    "@types/prettier": "2.7.1",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "aws-cdk-lib": "2.50.0",
