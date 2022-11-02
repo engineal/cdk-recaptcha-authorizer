@@ -1,11 +1,18 @@
 /* eslint-disable no-process-env,no-console */
 import * as AWS from 'aws-sdk';
-import * as xray from 'aws-xray-sdk';
+import * as AWSXRay from 'aws-xray-sdk-core';
+import * as http from 'http';
+import * as https from 'https';
 import {APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent} from 'aws-lambda';
+
+AWSXRay.captureHTTPsGlobal(http);
+AWSXRay.captureHTTPsGlobal(https);
+AWSXRay.capturePromise();
+
 import axios from 'axios';
 
-const secretsManagerClient = xray.captureAWSClient(new AWS.SecretsManager());
-const ssmClient = xray.captureAWSClient(new AWS.SSM());
+const secretsManagerClient = AWSXRay.captureAWSClient(new AWS.SecretsManager());
+const ssmClient = AWSXRay.captureAWSClient(new AWS.SSM());
 
 /**
  * @returns {Promise<string>} the secret key value stored in SSM Parameter Store

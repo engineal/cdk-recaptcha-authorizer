@@ -174,6 +174,7 @@ test('Lambda Function Created with secrets manager and json field', () => {
     });
 });
 
+// eslint-disable-next-line max-lines-per-function
 test('Request Authorizer Created', () => {
     const stack = new cdk.Stack();
     const api = new apigateway.RestApi(stack, 'TestAPI');
@@ -196,11 +197,39 @@ test('Request Authorizer Created', () => {
                 [
                     'arn:',
                     {
-                        Ref: 'AWS::Partition'
+                        'Fn::Select': [
+                            // eslint-disable-next-line no-magic-numbers
+                            1,
+                            {
+                                'Fn::Split': [
+                                    ':',
+                                    {
+                                        'Fn::GetAtt': [
+                                            'TestAuthorizerfunction3F10EDDB',
+                                            'Arn'
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     ':apigateway:',
                     {
-                        Ref: 'AWS::Region'
+                        'Fn::Select': [
+                            // eslint-disable-next-line no-magic-numbers
+                            3,
+                            {
+                                'Fn::Split': [
+                                    ':',
+                                    {
+                                        'Fn::GetAtt': [
+                                            'TestAuthorizerfunction3F10EDDB',
+                                            'Arn'
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     ':lambda:path/2015-03-31/functions/',
                     {
