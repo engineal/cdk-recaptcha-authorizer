@@ -18,8 +18,11 @@ jest.mock('aws-sdk', () => ({
     }))
 }));
 
-jest.mock('aws-xray-sdk', () => ({
-    captureAWSClient: <T>(client: T) => client
+jest.mock('aws-xray-sdk-core', () => ({
+    captureAWSClient: <T>(client: T) => client,
+    captureHTTPsGlobal: <T>(client: T) => client,
+    // eslint-disable-next-line no-empty-function,@typescript-eslint/no-empty-function
+    capturePromise: () => {}
 }));
 
 // eslint-disable-next-line init-declarations
