@@ -48,7 +48,7 @@
     "jest": "^27.5.1",
     "jsii": "^1.70.0",
     "jsii-pacmak": "^1.70.0",
-    "jsii-release": "^0.2.514",
+    "jsii-release": "^0.2.515",
     "mocked-env": "^1.3.5",
     "semantic-release": "^19.0.5",
     "ts-jest": "^27.1.4",
@@ -64,7 +64,7 @@
     "axios"
   ],
   "dependencies": {
-    "aws-sdk": "^2.1245.0",
+    "aws-sdk": "^2.1246.0",
     "aws-xray-sdk-core": "^3.3.8",
     "axios": "^0.27.2"
   },
