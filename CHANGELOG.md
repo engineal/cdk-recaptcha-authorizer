@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.2...v2.1.3) (2022-11-03)
+
+
+### Bug Fixes
+
+* minor updates to publish new version ([c9f6aa3](https://github.com/engineal/cdk-recaptcha-authorizer/commit/c9f6aa3defc42be26bd48abd34f54b4aaa23c279))
+
 ## [2.1.2](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.1...v2.1.2) (2022-01-17)
 
 
