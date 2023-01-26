@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "aws-cdk-lib": "2.50.0",
-    "constructs": "10.0.0",
+    "constructs": "10.1.231",
     "eslint": "^8.26.0",
     "husky": "^8.0.1",
     "is-ci": "^3.0.1",
