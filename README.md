@@ -1,4 +1,4 @@
-## Google reCAPTCHA API Gateway REST API authorizer
+# Google reCAPTCHA API Gateway REST API authorizer
 
 This construct provides an API Gateway REST API authorizer that uses Google's reCAPTCHA service to detect abusive
 traffic and allow or deny access to the API methods.
