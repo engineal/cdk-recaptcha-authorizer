@@ -1,6 +1,7 @@
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambdaNodeJS from 'aws-cdk-lib/aws-lambda-nodejs';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import {Construct} from 'constructs';
 import {SecretKey} from './secret-key';
 
@@ -22,6 +23,14 @@ export interface RecaptchaAuthorizerProps {
      * The reCaptcha API secret key
      */
     readonly reCaptchaSecretKey: SecretKey
+
+    /**
+     * The number of days log events are kept in CloudWatch Logs. When updating this property, unsetting it doesn't
+     * remove the log retention policy. To remove the retention policy, set the value to `INFINITE`.
+     *
+     * @default logs.RetentionDays.INFINITE
+     */
+    readonly logRetention?: logs.RetentionDays;
 
     /**
      * Enable AWS X-Ray Tracing for Lambda Function.
@@ -69,7 +78,7 @@ export class RecaptchaAuthorizer extends apigateway.Authorizer implements apigat
                 SECRET_KEY_TYPE: props.reCaptchaSecretKey.secretKeyType,
                 ...props.reCaptchaSecretKey.environment
             },
-            runtime: lambda.Runtime.NODEJS_14_X,
+            logRetention: props.logRetention,
             tracing: props.tracing
         });
 
