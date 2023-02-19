@@ -5,6 +5,35 @@ traffic and allow or deny access to the API methods.
 
 It currently only supports v3 of the reCAPTCHA service.
 
+## Installation
+
+### TypeScript / JavaScript
+
+`npm install cdk-recaptcha-authorizer`
+
+or
+
+`yarn add cdk-recaptcha-authorizer`
+
+### Python
+
+`pip install cdk-recaptcha-authorizer`
+
+### Java
+
+```xml
+<dependency>
+    <groupId>com.engineal.cdk</groupId>
+    <artifactId>cdk-recaptcha-authorizer</artifactId>
+</dependency>
+```
+
+### C# / .Net
+
+`dotnet add package EngineAL.CDK.RecaptchaAuthorizer`
+
+## Usage
+
 See https://developers.google.com/recaptcha/docs/v3 for how to integrate reCAPTCHA in your client code. When
 your client code executes the reCAPTCHA client, the returned token from the Google reCAPTCHA client library
 should be included in the API Gateway request in the `X-reCAPTCHA-Token` header.
@@ -73,7 +102,7 @@ SecretKey.fromSecretsManager(secret, 'my-secret-field')
 
 ## License
 
-   Copyright 2022 Aaron Lucia
+   Copyright 2023 Aaron Lucia
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
