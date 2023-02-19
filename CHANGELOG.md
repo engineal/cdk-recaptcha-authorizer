@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.3...v2.1.4) (2023-02-19)
+
+
+### Bug Fixes
+
+* update dependencies that don't break jsii ([#1308](https://github.com/engineal/cdk-recaptcha-authorizer/issues/1308)) ([f8b8e2f](https://github.com/engineal/cdk-recaptcha-authorizer/commit/f8b8e2f90eb5ddd497b45b4a4e4f637c18f708f9))
+
 ## [2.1.3](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.2...v2.1.3) (2022-11-03)
 
 
