@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.4...v2.2.0) (2023-02-19)
+
+
+### Features
+
+* add logRetention prop ([b19f554](https://github.com/engineal/cdk-recaptcha-authorizer/commit/b19f554297fda9bed1f6541feeb435823a1d20d8))
+
 ## [2.1.4](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.3...v2.1.4) (2023-02-19)
 
 
