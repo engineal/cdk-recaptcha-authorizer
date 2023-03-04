@@ -1,10 +1,10 @@
 {
   "name": "cdk-recaptcha-authorizer",
   "version": "2.2.0",
-  "description": "An AWS CDK library that provides a reCaptcha Authorizer for API Gateway REST APIs",
+  "description": "An AWS CDK construct library that provides a reCaptcha Authorizer for API Gateway REST APIs",
   "author": "Aaron Lucia",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/engineal/cdk-recaptcha-authorizer#readme",
+  "homepage": "https://constructs.dev/packages/cdk-recaptcha-authorizer",
   "repository": {
     "type": "git",
     "url": "https://github.com/engineal/cdk-recaptcha-authorizer.git"
