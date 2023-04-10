@@ -63,7 +63,7 @@
     "axios"
   ],
   "dependencies": {
-    "aws-sdk": "^2.1328.0",
+    "aws-sdk": "^2.1354.0",
     "aws-xray-sdk-core": "^3.4.1",
     "axios": "^0.27.2"
   },
