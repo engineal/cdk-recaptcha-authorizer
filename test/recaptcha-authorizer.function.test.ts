@@ -4,7 +4,7 @@ import axios from 'axios';
 import {mocked} from 'jest-mock';
 
 jest.mock('axios');
-const mockedAxios = mocked(axios, true);
+const mockedAxios = mocked(axios);
 
 const mockedGetSecretValue = jest.fn();
 const mockedGetParameter = jest.fn();
