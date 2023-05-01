@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.2.0...v2.2.1) (2023-05-01)
+
+
+### Bug Fixes
+
+* **deps-dev:** bump dependencies ([#1361](https://github.com/engineal/cdk-recaptcha-authorizer/issues/1361)) ([daa734a](https://github.com/engineal/cdk-recaptcha-authorizer/commit/daa734a37601e800b2ea0f3b2fbc238ffa105e98))
+
 # [2.2.0](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.1.4...v2.2.0) (2023-02-19)
 
 
