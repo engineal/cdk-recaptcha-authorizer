@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.2.1...v2.2.2) (2023-05-01)
+
+
+### Bug Fixes
+
+* allow release workflow to publish packages ([56736c6](https://github.com/engineal/cdk-recaptcha-authorizer/commit/56736c6d0dff2a14b62ccc6c5b6b6aa61887e3cd))
+
 ## [2.2.1](https://github.com/engineal/cdk-recaptcha-authorizer/compare/v2.2.0...v2.2.1) (2023-05-01)
 
 
