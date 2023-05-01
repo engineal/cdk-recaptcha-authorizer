@@ -1,9 +1,10 @@
 /* eslint-disable no-process-env,no-console */
-import * as AWS from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk-core';
 import * as http from 'http';
 import * as https from 'https';
 import {APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent} from 'aws-lambda';
+import {SSM} from '@aws-sdk/client-ssm';
+import {SecretsManager} from '@aws-sdk/client-secrets-manager';
 
 AWSXRay.captureHTTPsGlobal(http);
 AWSXRay.captureHTTPsGlobal(https);
@@ -11,8 +12,8 @@ AWSXRay.capturePromise();
 
 import axios from 'axios';
 
-const secretsManagerClient = AWSXRay.captureAWSClient(new AWS.SecretsManager());
-const ssmClient = AWSXRay.captureAWSClient(new AWS.SSM());
+const secretsManagerClient = AWSXRay.captureAWSv3Client(new SecretsManager({}));
+const ssmClient = AWSXRay.captureAWSv3Client(new SSM({}));
 
 /**
  * @returns {Promise<string>} the secret key value stored in SSM Parameter Store
@@ -22,7 +23,7 @@ const getSsmParameterSecret = async (secretKeyParameter: string): Promise<string
     const parameterResponse = await ssmClient.getParameter({
         Name: secretKeyParameter,
         WithDecryption: true
-    }).promise();
+    });
 
     if (!parameterResponse.Parameter?.Value) {
         throw new Error('SSM parameter response missing parameter!');
@@ -39,7 +40,7 @@ const getSsmParameterSecret = async (secretKeyParameter: string): Promise<string
 const getSecretsManagerSecret = async (secretKeySecretArn: string, field?: string): Promise<string> => {
     const secretResponse = await secretsManagerClient.getSecretValue({
         SecretId: secretKeySecretArn
-    }).promise();
+    });
 
     if (!secretResponse.SecretString) {
         throw new Error('Secrets Manager secret response missing secret string!');

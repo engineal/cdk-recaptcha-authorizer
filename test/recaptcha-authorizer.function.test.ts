@@ -1,25 +1,20 @@
 /* eslint-disable no-magic-numbers */
+import 'aws-sdk-client-mock-jest';
+import {GetParameterCommand, SSM} from '@aws-sdk/client-ssm';
+import {GetSecretValueCommand, SecretsManager} from '@aws-sdk/client-secrets-manager';
 import mockedEnv, {RestoreFn} from 'mocked-env';
 import axios from 'axios';
+import {mockClient} from 'aws-sdk-client-mock';
 import {mocked} from 'jest-mock';
 
 jest.mock('axios');
-const mockedAxios = mocked(axios, true);
+const mockedAxios = mocked(axios);
 
-const mockedGetSecretValue = jest.fn();
-const mockedGetParameter = jest.fn();
-
-jest.mock('aws-sdk', () => ({
-    SSM: jest.fn(() => ({
-        getParameter: mockedGetParameter
-    })),
-    SecretsManager: jest.fn(() => ({
-        getSecretValue: mockedGetSecretValue
-    }))
-}));
+const ssmMock = mockClient(SSM);
+const secretsManagerMock = mockClient(SecretsManager);
 
 jest.mock('aws-xray-sdk-core', () => ({
-    captureAWSClient: <T>(client: T) => client,
+    captureAWSv3Client: <T>(client: T) => client,
     captureHTTPsGlobal: <T>(client: T) => client,
     // eslint-disable-next-line no-empty-function,@typescript-eslint/no-empty-function
     capturePromise: () => {}
@@ -27,6 +22,11 @@ jest.mock('aws-xray-sdk-core', () => ({
 
 // eslint-disable-next-line init-declarations
 let restore: RestoreFn | undefined;
+
+beforeEach(() => {
+    ssmMock.reset();
+    secretsManagerMock.reset();
+});
 
 afterEach(() => {
     if (restore) {
@@ -235,12 +235,10 @@ test('handler caches ssm secret', async () => {
 
     lambda.resetSecret();
 
-    mockedGetParameter.mockReturnValue({
-        promise: () => Promise.resolve({
-            Parameter: {
-                Value: 'test-secret-key'
-            }
-        })
+    ssmMock.on(GetParameterCommand).resolves({
+        Parameter: {
+            Value: 'test-secret-key'
+        }
     });
 
     mockedAxios.post.mockReturnValue(Promise.resolve({
@@ -257,7 +255,7 @@ test('handler caches ssm secret', async () => {
     await lambda.handler(event);
     await lambda.handler(event);
     // THEN
-    expect(mockedGetParameter).toBeCalledTimes(1);
+    expect(ssmMock).toHaveReceivedCommandTimes(GetParameterCommand, 1);
     expect(mockedAxios.post).toBeCalledWith('https://www.google.com/recaptcha/api/siteverify', null, {
         params: {
             remoteip: '1.2.3.4',
@@ -279,10 +277,8 @@ test('handler caches secrets manager secret', async () => {
 
     lambda.resetSecret();
 
-    mockedGetSecretValue.mockReturnValue({
-        promise: () => Promise.resolve({
-            SecretString: 'test-secret-key'
-        })
+    secretsManagerMock.on(GetSecretValueCommand).resolves({
+        SecretString: 'test-secret-key'
     });
 
     mockedAxios.post.mockReturnValue(Promise.resolve({
@@ -299,7 +295,7 @@ test('handler caches secrets manager secret', async () => {
     await lambda.handler(event);
     await lambda.handler(event);
     // THEN
-    expect(mockedGetSecretValue).toBeCalledTimes(1);
+    expect(secretsManagerMock).toHaveReceivedCommandTimes(GetSecretValueCommand, 1);
     expect(mockedAxios.post).toBeCalledWith('https://www.google.com/recaptcha/api/siteverify', null, {
         params: {
             remoteip: '1.2.3.4',
@@ -322,12 +318,10 @@ test('handler parses secrets manager secret', async () => {
 
     lambda.resetSecret();
 
-    mockedGetSecretValue.mockReturnValue({
-        promise: () => Promise.resolve({
-            SecretString: JSON.stringify({
-                otherField: 'other value',
-                testField: 'test-secret-key'
-            })
+    secretsManagerMock.on(GetSecretValueCommand).resolves({
+        SecretString: JSON.stringify({
+            otherField: 'other value',
+            testField: 'test-secret-key'
         })
     });
 
@@ -345,7 +339,7 @@ test('handler parses secrets manager secret', async () => {
     await lambda.handler(event);
     await lambda.handler(event);
     // THEN
-    expect(mockedGetSecretValue).toBeCalledTimes(1);
+    expect(secretsManagerMock).toHaveReceivedCommandTimes(GetSecretValueCommand, 1);
     expect(mockedAxios.post).toBeCalledWith('https://www.google.com/recaptcha/api/siteverify', null, {
         params: {
             remoteip: '1.2.3.4',
